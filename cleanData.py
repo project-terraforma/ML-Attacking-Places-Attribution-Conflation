@@ -70,16 +70,20 @@ if __name__ == "__main__":
 
     # save cleaned data as csv files
     # for visulaization purpose
-    omf_csv = read_data_omf.to_csv('cleaned_omf_data.csv', index=False)
-    yelp_csv = read_data_yelp.to_csv('cleaned_yelp_data.csv', index=False)
+    #omf_csv = read_data_omf.to_csv('cleaned_omf_data.csv', index=False)
+    #yelp_csv = read_data_yelp.to_csv('cleaned_yelp_data.csv', index=False)
     
-    # retrieving the names in non-JSON format
-    omf_name = read_data_omf['names'].apply(get_name)
-    omf_category = read_data_omf['categories'].apply(get_category)
-    omf_confidence = read_data_omf['confidence']
-    omf_websites = read_data_omf['websites'].apply(get_website)
-    omf_socials = read_data_omf['socials'].apply(get_socials)
-    omf_phones = read_data_omf['phones'].apply(get_phones)
-    omf_addresses = read_data_omf['addresses'].apply(get_addresses)
-    print(omf_phones)
+    #### OMF ####
+    # retrieving information in non-JSON format
+    read_data_omf["omf_name"] = read_data_omf['names'].apply(get_name)
+    read_data_omf["omf_category"] = read_data_omf['categories'].apply(get_category)
+    read_data_omf["omf_confidence"] = read_data_omf['confidence']
+    read_data_omf["omf_websites"] = read_data_omf['websites'].apply(get_website)
+    read_data_omf["omf_socials"] = read_data_omf['socials'].apply(get_socials)
+    read_data_omf["omf_phones"] = read_data_omf['phones'].apply(get_phones)
+    read_data_omf["omf_addresses"] = read_data_omf['addresses'].apply(get_addresses)
     
+    csv = read_data_omf.to_csv("cleaned_omf_data.csv", index=False)
+    
+
+    #### YELP ####
