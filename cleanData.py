@@ -74,7 +74,7 @@ if __name__ == "__main__":
     #yelp_csv = read_data_yelp.to_csv('cleaned_yelp_data.csv', index=False)
     
     #### OMF ####
-    # retrieving information in non-JSON format
+    # retrieving information in non-JSON, string format
     read_data_omf["omf_name"] = read_data_omf['names'].apply(get_name)
     read_data_omf["omf_category"] = read_data_omf['categories'].apply(get_category)
     read_data_omf["omf_confidence"] = read_data_omf['confidence']
@@ -83,7 +83,13 @@ if __name__ == "__main__":
     read_data_omf["omf_phones"] = read_data_omf['phones'].apply(get_phones)
     read_data_omf["omf_addresses"] = read_data_omf['addresses'].apply(get_addresses)
     
-    csv = read_data_omf.to_csv("cleaned_omf_data.csv", index=False)
+    omf_csv = read_data_omf.to_csv("cleaned_omf_data.csv", index=False)
     
 
     #### YELP ####
+    read_data_yelp["yelp_full_address"] = read_data_yelp['address'] + ',' + read_data_yelp['city'] + ',' + read_data_yelp['state'] + ',' + read_data_yelp['postal_code']
+    
+    yelp_csv = read_data_yelp.to_csv("cleaned_yelp_data.csv", index=False)
+
+
+    # need to strip, lowercase, and remove punctuation to fuzzymatch
