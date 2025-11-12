@@ -42,11 +42,9 @@ with open(INPUT, encoding="utf-8") as fin, open(OUTPUT, "w", newline="", encodin
 
         place_id = row["id"]
 
-        #
-        # ------------------------------------------------------------
-        # 1. META
-        # ------------------------------------------------------------
-        #
+        # -------------------------------------------------------
+        # META
+        # -------------------------------------------------------
         meta_sources = safe_json(row["sources"])
         meta_name = safe_json(row["names"])
         meta_cat = safe_json(row["categories"])
@@ -78,11 +76,9 @@ with open(INPUT, encoding="utf-8") as fin, open(OUTPUT, "w", newline="", encodin
             meta_conf
         ])
 
-        #
-        # ------------------------------------------------------------
-        # 2. MSFT_EXISTENCE — from "sources" where dataset="msft"
-        # ------------------------------------------------------------
-        #
+        # -------------------------------------------------------
+        # MSFT_EXISTENCE — from "sources" where dataset="msft"
+        # -------------------------------------------------------
         if isinstance(meta_sources, list):
             for item in meta_sources:
                 if item.get("dataset") == "msft":
@@ -100,11 +96,10 @@ with open(INPUT, encoding="utf-8") as fin, open(OUTPUT, "w", newline="", encodin
                         ""
                     ])
 
-        #
-        # ------------------------------------------------------------
-        # 3. MSFT_STRUCTURED — from base_sources + base_* fields
-        # ------------------------------------------------------------
-        #
+
+        # ------------------------------------------------------
+        # MSFT_STRUCTURED — from base_sources + base_* fields
+        # ------------------------------------------------------
         msft_struct_sources = safe_json(row["base_sources"])
         msft_name = safe_json(row["base_names"])
         msft_cat = safe_json(row["base_categories"])
