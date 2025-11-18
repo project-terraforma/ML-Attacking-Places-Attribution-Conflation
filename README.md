@@ -120,3 +120,40 @@ A data cleaning and matching pipeline that integrates business records from two 
 4. Include additional matching criteria (phone numbers, websites)
 5. Add validation and quality metrics for matches
 6. Implement incremental/update processing
+
+
+## Rule-Based Algorithm Performance
+
+### v1 (Baseline)
+- Overall Accuracy: 94.24%
+- Name Accuracy: 71.43%
+- Errors: 8 systematic failures
+
+### v2 (Refined)
+- Overall Accuracy: **97.12%** ✅
+- Name Accuracy: 85.71%
+- Errors: 4 (50% reduction)
+- Improvement: +2.88%
+
+### By Attribute (v2)
+- Name: 85.71% (24/28)
+- Address: 100% (28/28)
+- Phone: 100% (27/27)
+- Category: 100% (28/28)
+- Website: 100% (28/28)
+
+## Key Improvements in v2
+1. Canonical brand name detection
+2. Business suffix removal (LLC, Inc, etc.)
+3. Word count preference limits
+4. Smarter tie-breaking logic
+
+## Dataset
+- Total matches: 28 (5 exact + 23 fuzzy)
+- Match rate: 1.4% (limited by geographic mismatch)
+- Data sources: OMF (2K) + Yelp Academic (150K)
+
+## Status
+ Objective 3 complete (exceeds 80% target)
+ Ready for Objective 4 (ML models)
+EOF
