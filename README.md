@@ -4,7 +4,9 @@ CRWN 102 Project B | Shreya Handa, Sriya Ramachandruni
 # Project Overview
 This project solves places attributes conflation, a common issue within the geospatial industry. The project tests two methods, a rule-based algorithm and machine learning model, comparing which would be best for long-usability.
 
-# Repository Structure
+## Repository Structure
+
+```markdown
 project/
 ├── Archived/                         # Old pipeline used earlier in the project (logic has since been changed)
 │     ├── cleanData.py                # Original OMF/Yelp cleaning + matching script
@@ -58,166 +60,121 @@ project/
 │
 ├── OMF_Yelp_compare.py               # Script comparing OMF vs Yelp coverage
 ├── OMF_normalize_data.py             # Normalization pipeline used before conflation
+│                                     # Outputs NORMALIZED_SOURCES.csv
 │
 ├── README.md                         # Documentation (this file)
 ├── VALID_MATCHES.csv                 # Verified matches used for truth assignment
 ├── project_b_samples_2k.csv
 ├── project_b_samples_2k.parquet       # Original OMF sample dataset
 └── requirements.txt                   # Project dependencies
+```
 
-# All about cleanData.py 
+## Installation & Usage
+### Installation
+#### 1. Clone the repository
+#### 2. Create a virtual environment
+```markdown
+python3 -m venv .venv
+source .venv/bin/activate     # Linux/macOS
+# or
+.\.venv\Scripts\activate      # Windows
+```
+#### 3. Install dependencies
+```markdown
+pip install -r requirements.txt
+```
+### Usage
+#### 1. Normalize and Prepare the OMF Data
+If you need to re-generate NORMALIZED_SOURCES.csv:
+```markdown
+python3 OMF_normalize_data.py
+```
+Outputs: ```NORMALIZED_SOURCES.csv``` used by both the rule-based and ML pipelines. 
+### Rule-Based Pipeline
+The rule-based system chooses the best attribute value using confidence scoring and tie-breaking logic. 
+#### 1. Build the golden dataset template
+```markdown
+python3 Rule-Based/rule_golden.py
+```
+Outputs:
+```
+Rule-Based/RULE_GOLDEN_DATASET_TEMPLATE.csv
+```
+#### 2. Run the rule-based conflation
+```
+python3 Rule-Based/rule_best_attributes.py
+```
+Outputs:
+```
+Rule-Based/RULE_BEST_ATTRIBUTES.csv
+```
+#### 3. Evaluate rule-based accuracy
+Outputs predicted best attribute accuracies (name, phone, address, categories, website).
+```
+python3 Rule-Based/rule_eval.py
+```
+### Machine Learning-Based Pipeline
+The ML pipeline trains a classifier per attribute and predicts the best provider per place. 
 
-## Overview
-A data cleaning and matching pipeline that integrates business records from two different data sources (OMF and Yelp) to create a unified dataset.
+#### 1. Build ML golden dataset
+```markdown
+python3 Machine\ Learning-Based/ml_golden.py
+```
+Outputs:
+```
+Machine Learning-Based/ML_GOLDEN_DATASET_TEMPLATE.csv
+```
+#### 2. Train all ML models + run inference
+Trains models (```models/*.joblib```), creates train feature files(```ML_TRAIN_FEATURES_*.csv```), creates inference feautre files (```ML_INFER_FEATURES_*.csv```), produces final attribute predictions (```ML_BEST_ATTRIBUTES.csv```). 
+```
+python3 Machine\ Learning-Based/ml_best_attributes.py
+```
+Outputs:
+```
+models/*.joblib
+ML_TRAIN_FEATURES_*.csv
+ML_INFER_FEATURES_*.csv
+ML_BEST_ATTRIBUTES.csv
+```
+#### 3. Evaluate ML accuracy
+Outputs predicted best attribute accuracies (name, phone, address, categories, website).
+```
+python3 Machine\ Learning-Based/ml_eval.py
+```
+## Results Summary
+```
+=== RULE-BASED ACCURACY (NORMALIZED) ===
 
-## Data Sources
+name      : 88.24%
+phone     : 94.12%
+address   : 100.00%
+categories: 64.71%
+website   : 68.75%
 
-### Input Files
-- **OMF Data**: `project_b_samples_2k.parquet`
-  - Contains business information in JSON format within columns
-  - Fields: names, categories, confidence, websites, socials, phones, addresses
+OVERALL ACCURACY: 83.16%
 
-- **Yelp Data**: `yelp_academic_dataset_business.json`
-  - Line-delimited JSON file from Yelp Academic Dataset
-  - Fields: name, address, city, state, postal_code, categories
+=== ML VALUE-BASED ACCURACY ===
 
-## Processing Pipeline
+name      : 76.00%
+phone     : 88.00%
+address   : 100.00%
+website   : 88.00%
+category  : 76.00%
 
-### 1. Data Loading and Initial Cleaning
-- Loads both datasets using pandas
-- Filters to only necessary columns
-- Drops rows with missing names or addresses
+OVERALL ACCURACY: 85.60%
+```
+## Project Objective & Key Results (OKRs)
 
-### 2. OMF Data Processing
+**Objective:** Develop rule-based and machine learning pipelines for resolving place-attribute conflation.
 
-#### Helper Functions
-- `get_name()`: Extracts primary name from JSON
-- `get_category()`: Extracts primary category from JSON
-- `get_website()`: Gets first website from list
-- `get_socials()`: Gets first social media link
-- `get_phones()`: Gets first phone number
-- `get_addresses()`: Combines address components into single string
+- **KR1**  
+  Build and document a normalized dataset covering **20+ location patterns** that are reused by **both** the rule-based and ML pipelines, and validate that it has **<10% parsing errors**.
 
-#### Transformations
-- Parses JSON fields into regular columns
-- Creates concatenated full addresses
-- Applies text cleaning (lowercase, alphanumeric only)
+- **KR2**  
+  Implement **5 rules per attribute** (name, phone, address, website, categories) and achieve **≥ 80% attribute-level accuracy** on the rule-based conflation dataset.
 
-### 3. Yelp Data Processing
-- Concatenates address components (address, city, state, postal_code)
-- Applies same text cleaning as OMF data
-- Maintains original and cleaned versions of fields
+- **KR3**  
+  Train **5 ML models** (one per attribute) and achieve **≥ 80% normalized, attribute-based accuracy** on the ML-based conflation dataset.
 
-### 4. Record Matching
-
-#### Exact Matching
-- Direct inner join on cleaned name AND cleaned address
-- Produces perfect matches only
-- Output: `matched_candidates.csv`
-
-#### Fuzzy Matching
-- Uses RapidFuzz library for similarity scoring
-- Token set ratio comparison for both names and addresses
-- Threshold: ≥85% similarity for both fields
-- More computationally intensive but catches variations
-- Includes progress tracking (every 50 records)
-- Output: `fuzzy_matched_candidates.csv`
-
-## Output Files
-
-### Cleaned Data Files
-1. **cleaned_omf_data.csv**
-   - Original OMF fields
-   - Extracted JSON values (omf_name, omf_category, etc.)
-   - Cleaned versions for matching
-
-2. **cleaned_yelp_data.csv**
-   - Original Yelp fields
-   - Combined full address
-   - Cleaned versions for matching
-
-### Matched Records
-3. **matched_candidates.csv**
-   - Exact matches between datasets
-   - Includes: names, addresses, categories, confidence scores, contact info
-
-4. **fuzzy_matched_candidates.csv**
-   - Similar matches based on fuzzy string matching
-   - Same fields as exact matches
-   - Captures variations in spelling, formatting, etc.
-
-## Key Features
-
-### Data Quality
-- Robust error handling with try/except blocks
-- Handles missing/malformed JSON gracefully
-- Preserves original data alongside cleaned versions
-
-### Text Normalization
-- `clean_text()` function:
-  - Converts to lowercase
-  - Removes special characters
-  - Strips whitespace
-  - Keeps only alphanumeric and spaces
-
-### Metadata Preservation
-- Maintains confidence scores from OMF
-- Preserves websites, social media, phone numbers
-- Keeps category information from both sources
-
-## Use Cases
-- **Data Integration**: Combining business listings from multiple sources
-- **Deduplication**: Identifying same businesses across datasets
-- **Data Enrichment**: Adding missing information from one source to another
-- **Quality Assessment**: Comparing data quality between sources
-
-## Performance Considerations
-- Exact matching is fast (pandas merge operation)
-- Fuzzy matching is O(n×m) complexity - can be slow for large datasets
-- Progress tracking helps monitor long-running fuzzy matches
-- Consider chunking or parallel processing for production use
-
-## Potential Improvements
-1. Add configurable similarity thresholds
-2. Implement blocking/indexing for faster fuzzy matching
-3. Add more sophisticated address parsing
-4. Include additional matching criteria (phone numbers, websites)
-5. Add validation and quality metrics for matches
-6. Implement incremental/update processing
-
-
-## Rule-Based Algorithm Performance
-
-### v1 (Baseline)
-- Overall Accuracy: 94.24%
-- Name Accuracy: 71.43%
-- Errors: 8 systematic failures
-
-### v2 (Refined)
-- Overall Accuracy: **97.12%** ✅
-- Name Accuracy: 85.71%
-- Errors: 4 (50% reduction)
-- Improvement: +2.88%
-
-### By Attribute (v2)
-- Name: 85.71% (24/28)
-- Address: 100% (28/28)
-- Phone: 100% (27/27)
-- Category: 100% (28/28)
-- Website: 100% (28/28)
-
-## Key Improvements in v2
-1. Canonical brand name detection
-2. Business suffix removal (LLC, Inc, etc.)
-3. Word count preference limits
-4. Smarter tie-breaking logic
-
-## Dataset
-- Total matches: 28 (5 exact + 23 fuzzy)
-- Match rate: 1.4% (limited by geographic mismatch)
-- Data sources: OMF (2K) + Yelp Academic (150K)
-
-## Status
- Objective 3 complete (exceeds 80% target)
- Ready for Objective 4 (ML models)
-EOF
+- **KR4**  
+  By Week 10, deliver evaluation comparing rule-based and ML pipelines, identifying **2 strengths and 2 limitations** of each, and concluding which approach is preferable for **long-term maintainability** and **explainability**.
