@@ -95,7 +95,7 @@ def normalize(val, field):
 # --------------------------------------------------------
 # EVALUATION
 # --------------------------------------------------------
-print("\n=== ML VALUE-BASED ACCURACY (NORMALIZED) ===\n")
+print("\n=== ML VALUE-BASED ACCURACY ===\n")
 
 acc_list = []
 

@@ -1,8 +1,13 @@
 import pandas as pd
 import json
+from pathlib import Path
+from datetime import datetime
 
-INPUT = "VALID_MATCHES.csv"
-OUTPUT = "ML_GOLDEN_DATASET_TEMPLATE.csv"
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # go up one folder
+INPUT = BASE_DIR / "VALID_MATCHES.csv"
+OUTPUT = Path(__file__).resolve().parent / f"ML_GOLDEN_DATASET_TEMPLATE_{timestamp}.csv"
 
 df = pd.read_csv(INPUT)
 

@@ -240,7 +240,6 @@ if __name__ == "__main__":
     print(f"Matchable: {matchable}")
     print(f"Valid: {valid}")
     acc = (valid / matchable) * 100 if matchable else 0
-    print(f"Accuracy: {acc:.2f}%")
 
     pd.DataFrame(valid_rows).to_csv("VALID_MATCHES.csv", index=False)
     print("\nWrote VALID_MATCHES.csv")

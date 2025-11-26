@@ -14,12 +14,16 @@ from joblib import dump, load
 import warnings
 warnings.filterwarnings("ignore")
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # go up one folder
+
 # =========================================================
 # CONFIG
 # =========================================================
-GOLDEN_FILE     = "ML_GOLDEN_DATASET_TEMPLATE.csv"   # labeled golden dataset
-NORMALIZED_FILE = "NORMALIZED_SOURCES.csv"           # same as rule-based input
-OUTPUT_ML       = "ML_BEST_ATTRIBUTES.csv"
+GOLDEN_FILE     = "ML_GOLDEN_DATASET_TEMPLATE.csv"              # labeled golden dataset
+NORMALIZED_FILE = BASE_DIR / "NORMALIZED_SOURCES.csv"           # same as rule-based input
+OUTPUT_ML       = Path(__file__).resolve().parent / "ML_BEST_ATTRIBUTES.csv"
 
 ATTRS      = ["name", "phone", "address", "website", "categories"]
 PROVIDERS  = ["foursquare", "meta", "microsoft"]

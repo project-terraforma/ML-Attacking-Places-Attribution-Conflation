@@ -3,9 +3,11 @@ import json
 import re
 from collections import Counter
 from rapidfuzz import fuzz
+from pathlib import Path
 
-INPUT_NORMALIZED = "NORMALIZED_SOURCES.csv"
-OUTPUT_BEST = "RULE_BEST_ATTRIBUTES.csv"
+BASE_DIR = Path(__file__).resolve().parent.parent  # go up one folder
+INPUT_NORMALIZED = BASE_DIR / "NORMALIZED_SOURCES.csv"
+OUTPUT_BEST = Path(__file__).resolve().parent / "RULE_BEST_ATTRIBUTES.csv"
 
 # Source priority used ONLY for best_source tie-breaking
 # (not for excluding anyone)
