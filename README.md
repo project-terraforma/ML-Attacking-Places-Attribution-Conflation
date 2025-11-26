@@ -1,5 +1,69 @@
-# Rule-Based & ML Attacking-Places-Attribution-Conflation
+# Rule-Based & ML Attacking Places Attribution Conflation
 CRWN 102 Project B | Shreya Handa, Sriya Ramachandruni
+
+# Project Overview
+This project solves places attributes conflation, a common issue within the geospatial industry. The project tests two methods, a rule-based algorithm and machine learning model, comparing which would be best for long-usability.
+
+# Repository Structure
+project/
+├── Archived/                         # Old pipeline used earlier in the project (logic has since been changed)
+│     ├── cleanData.py                # Original OMF/Yelp cleaning + matching script
+│     ├── cleaned_omf_data.csv       
+│     ├── cleaned_yelp_data.csv
+│     ├── fuzzy_matched_candidates.csv
+│     ├── matched_candidates.csv
+│     ├── rule_based_conflation.py    # First version of conflation algorithm
+│     └── rule_based_conflation_v2.py # Improved rule-based algorithm
+│
+├── Machine Learning-Based/           # All ML models, training code, inference, evaluation
+│     ├── models/                     # Saved .joblib trained models for each attribute
+│     │     ├── address_model.joblib
+│     │     ├── categories_model.joblib
+│     │     ├── name_model.joblib
+│     │     ├── phone_model.joblib
+│     │     └── website_model.joblib
+│     │
+│     ├── ML_BEST_ATTRIBUTES.csv         # Final ML predictions (per place_id)
+│     ├── ML_GOLDEN_DATASET_TEMPLATE.csv # Labeled truth set for training/evaluation
+│
+│     ├── ML_INFER_FEATURES_address.csv   # Features used during ML inference
+│     ├── ML_INFER_FEATURES_categories.csv
+│     ├── ML_INFER_FEATURES_name.csv
+│     ├── ML_INFER_FEATURES_phone.csv
+│     ├── ML_INFER_FEATURES_website.csv
+│
+│     ├── ML_TRAIN_FEATURES_address.csv   # Features extracted from golden dataset
+│     ├── ML_TRAIN_FEATURES_categories.csv
+│     ├── ML_TRAIN_FEATURES_name.csv
+│     ├── ML_TRAIN_FEATURES_phone.csv
+│     ├── ML_TRAIN_FEATURES_website.csv
+│
+│     ├── ml_best_attributes.py        # Main ML inference pipeline
+│     ├── ml_eval.py                   # ML evaluation script (attribute-based accuracy)
+│     └── ml_golden.py                 # Builds ML golden dataset template
+│
+├── Rule-Based/                       # Production-ready rule-based system
+│     ├── RULE_BEST_ATTRIBUTES.csv    # Output predictions from rule-based algorithm
+│     ├── RULE_GOLDEN_DATASET_TEMPLATE.csv # Labeled truth set for rule-based evaluation
+│     ├── rule_best_attributes.py     # Main rule-based pipeline
+│     ├── rule_eval.py                # Rule-based evaluation script (attribute-based accuracy)
+│     └── rule_golden.py              # Builds rule-based golden dataset template
+│
+├── __pycache__/                      # Python cache (auto-generated)
+│
+├── .gitignore
+├── LICENSE
+├── NORMALIZED_SOURCES.csv            # Master normalized source file (shared by ML + Rule)
+│                                     # Both systems import from this file
+│
+├── OMF_Yelp_compare.py               # Script comparing OMF vs Yelp coverage
+├── OMF_normalize_data.py             # Normalization pipeline used before conflation
+│
+├── README.md                         # Documentation (this file)
+├── VALID_MATCHES.csv                 # Verified matches used for truth assignment
+├── project_b_samples_2k.csv
+├── project_b_samples_2k.parquet       # Original OMF sample dataset
+└── requirements.txt                   # Project dependencies
 
 # All about cleanData.py 
 
