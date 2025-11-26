@@ -1,4 +1,4 @@
-# ML-Attacking-Places-Attribution-Conflation
+# Rule-Based & ML Attacking-Places-Attribution-Conflation
 CRWN 102 Project B | Shreya Handa, Sriya Ramachandruni
 
 # All about cleanData.py 
