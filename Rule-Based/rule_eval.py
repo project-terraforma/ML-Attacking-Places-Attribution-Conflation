@@ -65,7 +65,7 @@ def normalize(v, field):
 # EVALUATION
 # --------------------------------------------------------
 
-print("\n=== RULE-BASED ACCURACY (NORMALIZED) ===\n")
+print("\n=== RULE-BASED ACCURACY ===\n")
 
 results = []
 for field, (truth_col, pred_col) in ATTRS.items():
