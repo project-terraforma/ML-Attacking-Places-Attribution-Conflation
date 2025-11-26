@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 INPUT = "VALID_MATCHES.csv"
-OUTPUT = "RULE_GOLDEN_DATASET_TEMPLATE.csv"
+OUTPUT = "ML_GOLDEN_DATASET_TEMPLATE.csv"
 
 df = pd.read_csv(INPUT)
 

@@ -5,7 +5,7 @@ from collections import Counter
 from rapidfuzz import fuzz
 
 INPUT_NORMALIZED = "NORMALIZED_SOURCES.csv"
-OUTPUT_BEST = "BEST_ATTRIBUTES.csv"
+OUTPUT_BEST = "RULE_BEST_ATTRIBUTES.csv"
 
 # Source priority used ONLY for best_source tie-breaking
 # (not for excluding anyone)

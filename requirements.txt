@@ -2,3 +2,4 @@ pandas
 pyarrow
 fastparquet
 rapidfuzz
+scikit-learn
