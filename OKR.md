@@ -1,4 +1,3 @@
-```
 # Project Objective & Key Results (OKRs)
 
 **Objective:** Develop rule-based and machine learning pipelines for resolving place-attribute conflation.
