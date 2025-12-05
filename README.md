@@ -63,6 +63,7 @@ project/
 │                                     # Outputs NORMALIZED_SOURCES.csv
 │
 ├── README.md                         # Documentation (this file)
+├── Shreya & Sriya - Places Attribute Conflation Final Presentation (2)-compressed.pdf  # PDF of our final presentation
 ├── VALID_MATCHES.csv                 # Verified matches used for truth assignment
 ├── project_b_samples_2k.csv
 ├── project_b_samples_2k.parquet       # Original OMF sample dataset
